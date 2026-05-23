@@ -24,7 +24,7 @@ pool.query(`
 `);
 
 app.get('/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok' });
+  res.json({ status: 'ok working' });
 });
 
 app.get('/tasks', async (_req: Request, res: Response) => {
