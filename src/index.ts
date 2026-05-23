@@ -15,6 +15,29 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
+const connectWithRetry = async () => {
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS tasks (
+          id SERIAL PRIMARY KEY,
+          title TEXT NOT NULL,
+          done BOOLEAN DEFAULT false
+        )
+      `);
+      console.log('Database connected successfully');
+      break;
+    } catch (err) {
+      retries -= 1;
+      console.log(`DB not ready, retrying... (${retries} attempts left)`);
+      await new Promise(res => setTimeout(res, 3000)); // wait 3 seconds
+    }
+  }
+};
+
+connectWithRetry();
+
 pool.query(`
   CREATE TABLE IF NOT EXISTS tasks (
     id SERIAL PRIMARY KEY,
