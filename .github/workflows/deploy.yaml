@@ -54,7 +54,7 @@ jobs:
             docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
 
             cd ~/ts-task-manager
-            docker compose down
-            docker compose up -d
+            docker-compose down
+            docker-compose up -d
 
             echo "Deployment complete"
