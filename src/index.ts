@@ -45,7 +45,14 @@ pool.query(`
     done BOOLEAN DEFAULT false
   )
 `);
-
+app.get('/debug', async (_req: Request, res: Response) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ db: 'connected', host: process.env.DB_HOST });
+  } catch (err: any) {
+    res.json({ db: 'failed', error: err.message, host: process.env.DB_HOST });
+  }
+});
 app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok working' });
 });
